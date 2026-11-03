@@ -28,8 +28,16 @@ FATIGUE_ORDER = [
 CLTV_ORDER = ["High", "Medium", "Low"]
 
 
-def load_data(path):
-    return pd.read_csv(path, encoding="utf-8-sig")
+def load_data(path=None):
+    """Find marketing_campaign.csv anywhere in the project and load it."""
+    from pathlib import Path
+    here = Path(__file__).resolve().parent
+    matches = sorted(here.rglob("marketing_campaign.csv"))
+    if not matches:
+        raise FileNotFoundError(
+            "marketing_campaign.csv was not found in the repository. "
+            "Upload it to GitHub next to app.py.")
+    return pd.read_csv(matches[0], encoding="utf-8-sig")
 
 
 def _fatigue_level(row, median_spend):
